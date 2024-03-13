@@ -1,0 +1,41 @@
+---
+model:
+  embedding1:
+    type: Embedding
+    num_embeddings: 2000 # fetch needed
+    embedding_dim: 256
+    scale_grad_by_freq: False
+    sparse: False
+  LSTM1:
+    type: LSTM
+    embedding_dim: 256
+    hidden_dim: 100
+    batch_first: True
+    return_type: hidden_state
+  Cosine_sim1:
+    type: Cosine_sim
+    dim: 0
+    epsilon: 0.00000001
+  Linear1:
+    type: Linear
+    input_features: 100
+    output_features: 1
+    bias: False
+  Sigmoid1:
+    type: Activator
+    activator: sigmoid
+  Squeeze1:
+    type: Squeeze
+    dim: 1
+forward:
+  inputs: 2
+  order:
+    - sequence:
+      - embedding1
+      - LSTM1
+    - Cosine_sim1
+    - Linear1
+    - Sigmoid1
+    - Squeeze1
+
+  

@@ -1,0 +1,36 @@
+---
+model:
+  embedding1:
+    type: Embedding
+    num_embeddings: 2000 # fetch needed
+    embedding_dim: 128
+    scale_grad_by_freq: False
+    sparse: False
+  pos_encode_in1:
+    type: Positional_encode
+    d_model: 128
+    max_len: 1024
+  trans_deocder1:
+    type: TransformerDecoder
+    embedding_dim: 128
+    num_heads: 8
+    num_layers: 4
+    memory_dim: 128
+  dropout1:
+    type: Dropout
+    dropout: 0.2
+    inplace: False
+  linear1:
+    type: Linear
+    input_features: 128
+    output_features: 2000
+    bias: False
+
+forward:
+  inputs: 1
+  order:
+    - embedding1
+    - pos_encode_in1
+    - dropout1
+    - trans_deocder1
+    - linear1

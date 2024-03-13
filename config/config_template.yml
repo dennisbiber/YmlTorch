@@ -1,0 +1,82 @@
+---
+model:
+  encoder1:
+    type: Sequence
+    params:
+      - 0:
+          type: conv
+          num_inputs: 10
+          out_channels: 16
+          kernel_size: 3
+          stride: 1
+          padding: 1
+      - 1:
+          type: activator
+          activator: relu
+      - 2:
+          type: pool
+          kernel_size: 2
+          stride: 2
+  encoder2:
+    type: Sequence
+    params:
+      - 0:
+          type: conv
+          num_inputs: 16
+          out_channels: 32
+          kernel_size: 3
+          stride: 1
+          padding: 1
+      - 1:
+          type: activator
+          activator: relu
+      - 2:
+          type: pool
+          kernel_size: 2
+          stride: 2
+  decoder1:
+    type: Sequence
+    params:
+      - 0:
+          type: conv
+          num_inputs: 32
+          out_channels: 16
+          kernel_size: 2
+          stride: 1
+          padding: 1
+      - 1:
+          type: activator
+          activator: sigmoid
+  Dense1:
+    type: Dense
+    input_size: 16
+    output_size: 64
+  GRU1:
+    type: GRU
+    input_size: 64
+    hidden_size: 100
+    num_layers: 8
+    batch_first: True
+  lstm1:
+    type: LSTM
+    embedding_dim: 128
+    hidden_dim: 100
+    batch_first: False
+  dropout:
+    type: Dropout
+    dropout: 0.2
+    inplace: False
+  upsample1:
+    type: Upsample
+    scale_factor: 2
+    mode: nearest # 'nearest', 'linear', 'bilinear', 'bicubic' and 'trilinear'
+    align_corners: False
+
+forward:
+  inputs: 1
+  order:
+    - encoder1
+    - encoder2
+    - decoder1
+    - Dense1
+    - GRU1
